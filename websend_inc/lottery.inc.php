@@ -188,13 +188,12 @@ $lottery = array(
         ),
     ),
     'random_pet' => array(
-        'chance' => 10,
+        'chance' => 45,
         'type' => 'random_pet',
         'data' => 'pet',
         'txt' => 'a random Animal Egg',
         'blocks' => array(
             'spawn_egg:31', //donkey
-            'spawn_egg:32', //mule
             'spawn_egg:90', //pig
             'spawn_egg:91', //sheep
             'spawn_egg:92', //cow
@@ -203,14 +202,32 @@ $lottery = array(
             'spawn_egg:95', //wolf
             'spawn_egg:96', //mooshroom
             'spawn_egg:98', //ocelot
-            'spawn_egg:100', //horse
-            'spawn_egg:102', //polar_bear
-            'spawn_egg:103', //llama
-            'spawn_egg:120', //villager
         ),
     ),
+    'random_pet_rare' => array(
+        'chance' => 14,
+        'type' => 'random_pet_rare',
+        'data' => 'pet',
+        'txt' => 'a random Rare Egg',
+        'blocks' => array(
+            'spawn_egg:103', //llama
+            'spawn_egg:120', //villager   
+            'spawn_egg:100', //horse
+            'spawn_egg:32', //mule
+        )
+    ),
+    'random_pet_epic' => array(
+        'chance' => 1,
+        'type' => 'random_pet_epic'
+        'data' => 'pet',
+        'txt' => 'a random Epic Egg'
+        'blocks' => array(
+            'spawn_egg:29', //zombie horse
+            'spawn_egg:102', //polar_bear
+        )
+     ), 
     'random_unc' => array(
-        'chance' => 180,
+        'chance' => 130,
         'type' => 'random_unc',
         'data' => 'unc',
         'txt' => 'a random amount of Uncs (max 500)',
@@ -636,6 +653,26 @@ function umc_lottery() {
             break;
         case 'random_pet': // same as blocks below but only 1 always
             // umc_echo($type);
+            $block = $prize['blocks'];
+            $luck2 = mt_rand(0, count($prize['blocks']) - 1);
+            $given_block = explode(":", $block[$luck2]);
+            $given_block_type = $given_block[0];
+            $given_block_data = $given_block[1];
+            umc_deposit_give_item($uuid, $given_block_type, $given_block_data, '', 1, 'lottery');
+            $item = umc_goods_get_text($given_block_type, $given_block_data);
+            $item_txt = "a " .$item['full'];
+            break;
+        case 'random_pet rare':
+            $block = $prize['blocks'];
+            $luck2 = mt_rand(0, count($prize['blocks']) - 1);
+            $given_block = explode(":", $block[$luck2]);
+            $given_block_type = $given_block[0];
+            $given_block_data = $given_block[1];
+            umc_deposit_give_item($uuid, $given_block_type, $given_block_data, '', 1, 'lottery');
+            $item = umc_goods_get_text($given_block_type, $given_block_data);
+            $item_txt = "a " .$item['full'];
+            break;
+        case 'random_pet_epic':
             $block = $prize['blocks'];
             $luck2 = mt_rand(0, count($prize['blocks']) - 1);
             $given_block = explode(":", $block[$luck2]);
